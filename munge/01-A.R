@@ -16,3 +16,24 @@ posts <- read_se_xml("Posts")
 
 tags  <- read_se_xml("Tags")
 
+
+# function to munge tags and create a graph
+
+tagCombinations <- function(taglist){
+        matches<- str_match_all(taglist, "<([a-z0-9\\-]+)>")
+        tags_matched <- matches[[1]][,2]
+        if (length(tags_matched)<2){
+                tagCombinations  <- data.frame(from=NA, to=NA)
+        }else{
+                retdf  <- as.data.frame(t(combn(tags_matched,2)))
+                names(retdf) <- c("from", "to")
+                tagCombinations <- retdf
+        }
+}
+
+tagpairs <- map_dfr(posts$Tags, tagCombinations)
+tagpairs <- tagpairs[!is.na(tagpairs$from),]
+
+# test <- "<one><two><three-four>"
+# test2 <-"<one>"
+# print(tagCombinations(test))

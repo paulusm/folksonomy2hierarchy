@@ -8,7 +8,7 @@ munging: TRUE
 logging: FALSE
 logging_level: INFO
 load_libraries: TRUE
-libraries: tidyverse, stringr, lubridate, xml2, data.table
+libraries: tidyverse, stringr, lubridate, xml2, data.table, purrr
 as_factors: FALSE
 tables_type: tibble
 attach_internal_libraries: FALSE
