@@ -33,6 +33,8 @@ tagCombinations <- function(taglist){
 
 tagpairs <- map_dfr(posts$Tags, tagCombinations)
 tagpairs <- tagpairs[!is.na(tagpairs$from),]
+# Add opposites for directed graph
+tagpairs <- rbind(tagpairs, data.frame(from=tagpairs$to, to=tagpairs$from))
 
 # test <- "<one><two><three-four>"
 # test2 <-"<one>"
