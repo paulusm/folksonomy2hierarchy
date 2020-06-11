@@ -6,7 +6,7 @@ load.project()
 # Create the tag graph with weights from coccurances
 tag_graph <- graph_from_data_frame(tagpairs, directed=TRUE, vertices=tags[,c("TagName", "Count")])
 E(tag_graph)$weight <- count_multiple(tag_graph)
-tag_graph <- igraph::simplify(tag_graph, remove.multiple=TRUE)
+tag_graph <- igraph::simplify(tag_graph, remove.multiple=TRUE, remove.loops = TRUE)
 summary(tag_graph)
 
 
@@ -26,13 +26,17 @@ tag_graph_reduced %>% ggraph(layout = 'stress') +
 # Tibeĺy, G., Pollner, P., Vicsek, T., & Palla, G. (2013). 
 # Extracting tag hierarchies. PLoS ONE, 8(12), 1–46. https://doi.org/10.1371/journal.pone.0084133
 
-# 1) Duplicate graph to get two way relations
-edges <- get.edgelist(tag_graph)
-tag_graph <- add_edges(tag_graph,  matrix(c(edges[,2], edges[,1])))
-summary(tag_graph)
+ # 1) Prune based on weight fractions of incoming links
 
-#2 Prune based on weight fractions of incoming links
-
-
+for (i in 1:vcount(tag_graph)){
+  v <- V(tag_graph)[i]
+  #print(v$name)
+  # get in edges
+  e <- incident(tag_graph, v, mode="in")
+  # this is the weight threshold, a fraction of the largest
+  maxweight <- max(e$weight) * 0.4
+  prunable <- e[e$weight < maxweight]
+  tag_graph <- delete.edges(tag_graph, prunable )
+}
 
 

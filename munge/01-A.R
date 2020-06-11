@@ -21,7 +21,7 @@ tags  <- read_se_xml("Tags")
 
 tagCombinations <- function(taglist){
         matches<- str_match_all(taglist, "<([a-z0-9\\-]+)>")
-        tags_matched <- matches[[1]][,2]
+        tags_matched <- trimws(matches[[1]][,2])
         if (length(tags_matched)<2){
                 tagCombinations  <- data.frame(from=NA, to=NA)
         }else{
