@@ -123,33 +123,31 @@ for(i in 1:length(roots)){
 max_ent <- max(vertex_attr(tag_graph,"entropy", roots))
 global_root <- roots[roots$entropy == max_ent]
 
-# reattach remainder
+# reattach remainder to "usability"
 orphan_roots <- difference(roots, global_root)
+print(orphan_roots)
 
-for(i in 2:2){#length(orphan_roots)){
-  e_root <- incident(tag_graph, orphan_roots[i])
-  w_max <- max(edge_attr(tag_graph, "weight", e_root))
-  e_max <- e_root[e_root$weight == w_max]
-  tag_graph <- add_edges(tag_graph, c())
-  #tag_graph <- delete_edges(tag_graph, e_max)
+for(i in 1:length(orphan_roots)){
+  tag_graph <- add_edges(tag_graph, c(V(tag_graph)["usability"],orphan_roots[i]))
 }
 
 ############ Viz
 
 
 # A reduced graph for viz
-tag_graph_reduced <- delete.edges(tag_graph , which(E(tag_graph)$weight < 1000))
+tag_graph_reduced <- delete.edges(tag_graph , which(E(tag_graph)$weight < 500))
 tag_graph_reduced <- delete.vertices(tag_graph_reduced, which(degree(tag_graph_reduced, mode = "all") == 0))
 summary(tag_graph_reduced)
 
-plot(tag_graph_reduced, layout = layout.reingold.tilford(tag_graph_reduced, root=V(tag_graph_reduced)[name=="website-design"]))
+#plot(tag_graph, layout = layout.reingold.tilford(tag_graph, root=global_root))
 
-print(tag_graph, full = TRUE )
+#print(tag_graph, full = TRUE )
 
 # Plot tag graph
-tag_graph_reduced %>% ggraph(layout = 'dendrogram') +
+tag_graph_reduced %>% ggraph(layout = 'dendrogram', circular = TRUE) + #circlepack
   geom_edge_link(aes(alpha = weight, width = weight)) +
-  geom_node_label(aes(label = name)) +
+  #geom_edge_elbow()+
+  geom_node_label(aes(label = name)) + #,repel=TRUE'
   theme_void()
 
 
