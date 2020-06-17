@@ -1,0 +1,28 @@
+---
+title: "UX-Taxonomy"
+author: "Paul Matthews"
+date: "17/06/2020"
+output: pdf_document
+---
+
+Taxonomy created from [UX Stack Exchange](https://ux.stackexchange.com/) tags 
+
+[CC Attribution ShareAlike](http://creativecommons.org/licenses/by-sa/4.0/), content created by members of the UX Stack Exchange Community
+
+Created from the tag graph using algorithm by Tibely et al (2013). See (https://github.com/paulusm/folksonomy2hierarchy) for the code.
+
+## Reference
+
+Tibeĺy, G., Pollner, P., Vicsek, T., & Palla, G. (2013). Extracting tag hierarchies. PLoS ONE, 8(12), 1–46. https://doi.org/10.1371/journal.pone.0084133
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+# Load data
+cwd <- dirname(getwd())
+load(file=paste0(cwd, "/docs/tags.RData"))
+print(tags.dt, "weight", limit=NULL)
+```
+
