@@ -21,7 +21,6 @@ message("Pruning by 0.3..")
 ########## 1) Prune based on weight fractions of incoming links
 for (i in 1:vcount(tag_graph)){
   v <- V(tag_graph)[i]
-  #print(v$name)
   # get in edges
   e <- incident(tag_graph, v, mode="in")
   # this is the weight threshold, a fraction of the largest
