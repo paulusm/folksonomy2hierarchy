@@ -15,3 +15,13 @@ tag_graph_reduced %>% ggraph(layout = 'dendrogram', circular = TRUE) + #circlepa
   #geom_edge_elbow()+
   geom_node_label(aes(label = name)) + #,repel=TRUE'
   theme_void()
+
+# networkD3
+tagtreed3 <- tag_graph %>% as_data_frame(what="both")
+tagtreed3$edges <- tagtreed3$edges %>% arrange(from, to)
+
+tags.dt <- FromDataFrameNetwork(tagtreed3$edges)
+Prune(tags.dt, function(x) !is.na(GetAttribute(x, "weight")))
+Prune(tags.dt, function(x) GetAttribute(x, "weight") > 200)
+#print(tags.dt, "weight")
+radialNetwork(ToListExplicit(tags.dt, unname = TRUE))
